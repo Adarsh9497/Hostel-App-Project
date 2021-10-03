@@ -48,7 +48,7 @@ class RadioButtonBox extends StatelessWidget {
   final Function() onPressed;
 
   RadioButtonBox(
-      {this.backgroundcolour = kBackgroundColor,
+      {this.backgroundcolour = Colors.white,
       required this.text,
       required this.onPressed,
       this.bordercolour = Colors.grey,

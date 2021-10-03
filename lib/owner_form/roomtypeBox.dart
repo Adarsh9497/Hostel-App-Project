@@ -149,7 +149,7 @@ class _RoomTypeBoxState extends State<RoomTypeBox> {
                         Icons.delete_outline,
                         color: Colors.red,
                       ),
-                    )
+                    ),
                 ],
               ),
             ),
@@ -423,52 +423,101 @@ class _RoomTypeBoxState extends State<RoomTypeBox> {
         child: Column(
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(Icons.close)),
-                Text(
-                  'Select Facility',
-                  style: kTitleText.copyWith(fontWeight: FontWeight.w500),
+                Padding(
+                  padding: EdgeInsets.only(left: 50.w, right: 50.w),
+                  child: Text(
+                    'Select Facility',
+                    style: kTitleText.copyWith(fontWeight: FontWeight.w500),
+                  ),
                 ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Done',
+                    style: kSubTitleText.copyWith(
+                        fontWeight: FontWeight.w500, color: Colors.blue),
+                  ),
+                )
               ],
+            ),
+            SizedBox(
+              height: 20.h,
             ),
             Expanded(
               child: Container(
                 child: ListView.builder(
-                  controller: controller,
-                  shrinkWrap: true,
-                  itemCount: facilites.length,
-                  itemBuilder: (context, index) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Material(
-                        color: kBackgroundColor,
-                        child: InkWell(
-                          onTap: () {
-                            data.addFacility(
-                                s: facilites[index], index: widget.index);
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(50.w, 30.h, 50.w, 30.h),
-                            child: Text(
-                              facilites[index],
-                              style: kSubTitleText,
+                    controller: controller,
+                    shrinkWrap: true,
+                    itemCount: facilites.length,
+                    itemBuilder: (context, index) {
+                      bool check = false;
+                      check = data.searchRoomFacility(
+                          facilites[index], widget.index);
+                      return StatefulBuilder(
+                          builder: (_, StateSetter setModalState) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Material(
+                              color: kBackgroundColor,
+                              child: InkWell(
+                                onTap: () {
+                                  setModalState(() {
+                                    check = !check;
+                                    if (check) {
+                                      data.addFacility(
+                                          s: facilites[index],
+                                          index: widget.index);
+                                    } else {
+                                      data.deleteFacility(
+                                          s: facilites[index],
+                                          index: widget.index);
+                                    }
+                                  });
+                                },
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                        value: check,
+                                        onChanged: (val) {
+                                          setModalState(() {
+                                            check = val!;
+                                            if (val) {
+                                              data.addFacility(
+                                                  s: facilites[index],
+                                                  index: widget.index);
+                                            } else {
+                                              data.deleteFacility(
+                                                  s: facilites[index],
+                                                  index: widget.index);
+                                            }
+                                          });
+                                        }),
+                                    Container(
+                                      margin: EdgeInsets.fromLTRB(
+                                          50.w, 30.h, 50.w, 30.h),
+                                      child: Text(
+                                        facilites[index],
+                                        style: kSubTitleText,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        height: 1,
-                        color: Color(0xffDBDBDB),
-                      ),
-                    ],
-                  ),
-                ),
+                            Container(
+                              width: double.infinity,
+                              height: 1,
+                              color: Color(0xffDBDBDB),
+                            ),
+                          ],
+                        );
+                      });
+                    }),
               ),
             ),
           ],

@@ -36,7 +36,7 @@ class _OwnerAccountPageState extends State<OwnerAccountPage> {
                       imageAvators + '${MySharedPref.getAvatar() + 1}.png',
                     )),
                 SizedBox(
-                  width: 100.w,
+                  width: 70.w,
                 ),
                 ValueListenableBuilder(
                   valueListenable: HiveVariablesDB.variablesDB.listenable(),

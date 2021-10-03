@@ -9,28 +9,6 @@ import 'package:hostel_app/user_app/user_navigator.dart';
 import 'package:provider/provider.dart';
 import 'widgets/custom_widgets.dart';
 
-// List<String> facilites = [
-//   "24X7 Female Caretaker",
-//   "24X7 Male Caretaker",
-//   '24X7 Security Guards',
-//   'AC Study Room',
-//   'Biometric Entry/Exit Gate',
-//   'CCTV',
-//   'Clean Common Washrooms',
-//   'Common Room TV',
-//   'Food from Centralised Kitchen',
-//   'Fridge',
-//   'Free Hi-Speed WiFi',
-//   'Lift',
-//   'Low-cost Laundry Service',
-//   'Power Backup',
-//   'Professional Housekeeping',
-//   'RO Water',
-//   'Unlimited Free of Charge Doctor Consultation',
-//   'Water Cooler',
-//   "",
-// ];
-
 enum Gender { boy, girl, none }
 
 class HostelPage extends StatefulWidget {
@@ -182,7 +160,7 @@ class _HostelPageState extends State<HostelPage> {
           child: Form(
             key: _formKey,
             child: Scaffold(
-              backgroundColor: kBackgroundColor,
+              backgroundColor: Colors.white,
               appBar: AppBar(
                 backgroundColor: Colors.blue,
                 elevation: 4,
@@ -218,7 +196,7 @@ class _HostelPageState extends State<HostelPage> {
                             margin: EdgeInsets.fromLTRB(50.w, 40.h, 50.w, 10.h),
                             child: RequiredText(
                               asterisksize: 60,
-                              text: ' marked fields are required',
+                              text: ' Marked Fields Are Required',
                               textcolour: Colors.blue,
                               textsize: 40,
                               required: false,
@@ -948,81 +926,126 @@ class _HostelPageState extends State<HostelPage> {
 
   Widget BottomSheet(BuildContext context, DataProvider data) {
     return DraggableScrollableSheet(
-      initialChildSize: 0.7,
-      maxChildSize: 0.9,
-      minChildSize: 0.2,
-      builder: (_, controller) => Container(
-        decoration: BoxDecoration(
-            color: kBackgroundColor,
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(10), topLeft: Radius.circular(10))),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(Icons.close)),
-                Text(
-                  'Select Facility',
-                  style: kTitleText.copyWith(fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
-            Expanded(
-              child: Container(
-                child: ListView.builder(
-                    controller: controller,
-                    shrinkWrap: true,
-                    itemCount: Amenities().facilities.length,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Material(
-                            color: kBackgroundColor,
-                            child: InkWell(
-                                onTap: () {
-                                  data.addCommonFacility(
-                                      s: Amenities().facilities[index]);
-                                  Navigator.pop(context);
-                                  setState(() {});
-                                },
-                                child: CheckboxListTile(
-                                  title: Container(
-                                    margin: EdgeInsets.fromLTRB(
-                                        50.w, 30.h, 50.w, 30.h),
-                                    child: Text(
-                                      Amenities().facilities[index],
-                                      style: kSubTitleText,
+        initialChildSize: 0.7,
+        maxChildSize: 0.9,
+        minChildSize: 0.2,
+        builder: (_, controller) => Container(
+              decoration: BoxDecoration(
+                  color: kBackgroundColor,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      topLeft: Radius.circular(10))),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 50.w, right: 50.w),
+                        child: Text(
+                          'Select Facility',
+                          style:
+                              kTitleText.copyWith(fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'Done',
+                          style: kSubTitleText.copyWith(
+                              fontWeight: FontWeight.w500, color: Colors.blue),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20.h,
+                  ),
+                  Expanded(
+                    child: Container(
+                      child: ListView.builder(
+                          controller: controller,
+                          shrinkWrap: true,
+                          itemCount: Amenities().facilities.length,
+                          itemBuilder: (context, index) {
+                            bool check = false;
+                            check = data.searchCommonFacility(
+                                Amenities().facilities[index]);
+                            return StatefulBuilder(
+                                builder: (_, StateSetter setModalState) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Material(
+                                    color: kBackgroundColor,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setModalState(() {
+                                          check = !check;
+                                          if (check) {
+                                            data.addCommonFacility(
+                                                s: Amenities()
+                                                    .facilities[index]);
+                                          } else {
+                                            data.deleteCommonFacility(
+                                                s: Amenities()
+                                                    .facilities[index]);
+                                          }
+                                        });
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Checkbox(
+                                              value: check,
+                                              onChanged: (val) {
+                                                setModalState(() {
+                                                  check = val!;
+                                                  if (val) {
+                                                    data.addCommonFacility(
+                                                        s: Amenities()
+                                                            .facilities[index]);
+                                                  } else {
+                                                    data.deleteCommonFacility(
+                                                        s: Amenities()
+                                                            .facilities[index]);
+                                                  }
+                                                });
+                                              }),
+                                          Expanded(
+                                            child: Container(
+                                              margin: EdgeInsets.fromLTRB(
+                                                  50.w, 30.h, 50.w, 30.h),
+                                              child: Text(
+                                                Amenities().facilities[index],
+                                                style: kSubTitleText,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                  value: false,
-                                  onChanged: (newValue) {},
-                                  controlAffinity: ListTileControlAffinity
-                                      .leading, //  <-- leading Checkbox
-                                )),
-                          ),
-                          Container(
-                            width: double.infinity,
-                            height: 1,
-                            color: Color(0xffDBDBDB),
-                          ),
-                        ],
-                      );
-                    }),
+                                  Container(
+                                    margin: (index ==
+                                            Amenities().facilities.length - 1)
+                                        ? EdgeInsets.only(bottom: 50.h)
+                                        : null,
+                                    width: double.infinity,
+                                    height: 1,
+                                    color: Color(0xffDBDBDB),
+                                  ),
+                                ],
+                              );
+                            });
+                          }),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
-      ),
-    );
+            ));
   }
 
   Container Hostelrule(int index) {

@@ -22,7 +22,6 @@ class Amenities {
     'RO Water',
     'Unlimited Free of Charge Doctor Consultation',
     'Water Cooler',
-    "",
   ];
 
   List<String> amenityIcon = [

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-const kBackgroundColor = Color(0xfffafbff);
+const kBackgroundColor = Colors.white;
 const kDarkblueColor = Color(0xFF0099FF);
 const kveryLightBlueColor = Color(0xffE5ECFF);
 const kLightBlackColor = Color(0xff414141);

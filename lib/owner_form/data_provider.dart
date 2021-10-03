@@ -11,7 +11,7 @@ import 'package:hostel_app/models/hiveRooms_model.dart';
 class DataProvider extends ChangeNotifier {
   String mobileNumber = "";
 
-  //Hostel Data .....................
+  //Hostel Data .............................
   bool hostelDataUpdated = false;
   String availableBeds = "";
   String hostelName = ""; //TODO change name to ""
@@ -78,6 +78,14 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool searchCommonFacility(String f) {
+    int c = commonFacilities.indexOf(f);
+    if (c == -1)
+      return false;
+    else
+      return true;
+  }
+
   void deleteCommonFacility({required String s}) {
     commonFacilities.remove(s);
     notifyListeners();
@@ -124,6 +132,14 @@ class DataProvider extends ChangeNotifier {
     }
     roomData[index].facilities.add(s);
     notifyListeners();
+  }
+
+  bool searchRoomFacility(String s, int index) {
+    int c = roomData[index].facilities.indexOf(s);
+    if (c == -1)
+      return false;
+    else
+      return true;
   }
 
   void deleteFacility({required String s, required int index}) {
